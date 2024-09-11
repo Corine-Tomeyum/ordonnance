@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Ordonnances</title>
+    <style>
+        .prescription-item {
+            width: 70%; /* Réduit la largeur des prescriptions */
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .prescription-details {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        
+        .prescription-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .edit-prescription-btn {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .btn-primary i {
+            color: white;
+        }
+
+        .btn-primary:hover i {
+            color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <div class="mini_body">
+        <br>
+        <span style="margin-left: 10px; font-weight: bold; font-size: large;">Ordonnances</span> <br><br>
+        <nav class="nav_bar">
+            <a href="{{ url_for('index') }}">Accueil</a>
+            <a href="{{ url_for('formulaire') }}">Création des ordonnances</a>
+            <a href="{{ url_for('historique') }}">Historique</a>
+        </nav>
+        <br>
+        <div class="container">
+            <h2>Formulaire d'Ordonnance</h2>
+            <form id="ordonnance-form" method="post" action="{{ url_for('visualiser_ordonnance') }}">
+                <div id="info-patient">
+                    <label for="nom">Nom du patient:</label>
+                    <input type="text" id="nom" name="nom" required>
+        
+                    <label for="prenom">Prénom du patient:</label>
+                    <input type="text" id="prenom" name="prenom" required>
+    
+                    <div class="add_btn">
+                        <label for="prescription">Prescriptions</label>
+                        
+                        <div class="prescription-actions">
+                            <button id="add-prescription-btn" type="button" class="btn btn-primary">
+                                <i class="bi bi-plus-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="prescription-list"></div>
+        
+                    <label for="date">Date du prochain rendez-vous:</label>
+                    <input type="date" id="date" name="date" required>
+
+                    <button type="submit" class="btn">Visualiser</button>
+        
+                </div>
+
+    
+                <div class="prescription-form" id="prescription-form">
+                    <h3>Nouvelle Prescription</h3>
+                    <label for="medicament">Nom du médicament:</label>
+                    <input type="text" id="medicament" name="medicament" >
+    
+                    <label for="dose">Dose:</label>
+                    <input type="text" id="dose" name="dose" >
+    
+                    <label for="boites">Nombre de boîtes:</label>
+                    <input type="text" id="boites" name="boites" >
+    
+                    <label for="posologie">Posologie:</label>
+                    <input type="text" id="posologie" name="posologie" >
+    
+                    <button type="button" class="btn" id="save-prescription-btn">Valider la prescription</button>
+                </div>
+    
+                
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        const addPrescriptionBtn = document.getElementById('add-prescription-btn');
+        const prescriptionForm = document.getElementById('prescription-form');
+        const savePrescriptionBtn = document.getElementById('save-prescription-btn');
+        const prescriptionList = document.getElementById('prescription-list');
+        const infoPatient = document.getElementById('info-patient');
+        const ordonnanceForm = document.getElementById('ordonnance-form');
+    
+        let prescriptions = []; // Stocker les prescriptions sous forme de tableau
+        let prescriptionToEdit = null; // Stocker l'index de la prescription à modifier
+    
+        // Afficher le formulaire de prescription pour ajout ou modification
+        addPrescriptionBtn.addEventListener('click', () => {
+            prescriptionForm.style.display = 'block';
+            infoPatient.style.display = 'none';
+            prescriptionToEdit = null; // Réinitialiser lors de l'ajout d'une nouvelle prescription
+        });
+    
+        // Sauvegarder ou modifier une prescription
+        savePrescriptionBtn.addEventListener('click', () => {
+            const medicament = document.getElementById('medicament').value;
+            const dose = document.getElementById('dose').value;
+            const boites = document.getElementById('boites').value;
+            const posologie = document.getElementById('posologie').value;
+    
+            if (medicament && dose && boites && posologie) {
+                const prescriptionData = {
+                    medicament,
+                    dose,
+                    boites,
+                    posologie
+                };
+    
+                if (prescriptionToEdit !== null) {
+                    // Modification d'une prescription existante
+                    prescriptions[prescriptionToEdit] = prescriptionData;
+                } else {
+                    // Ajout d'une nouvelle prescription
+                    prescriptions.push(prescriptionData);
+                }
+    
+                renderPrescriptions();
+    
+                // Vider le formulaire
+                document.getElementById('medicament').value = '';
+                document.getElementById('dose').value = '';
+                document.getElementById('boites').value = '';
+                document.getElementById('posologie').value = '';
+    
+                // Masquer le formulaire de prescription et afficher les infos du patient
+                prescriptionForm.style.display = 'none';
+                infoPatient.style.display = 'block';
+            }
+        });
+    
+        // Fonction pour afficher les prescriptions dans la liste
+        function renderPrescriptions() {
+            prescriptionList.innerHTML = '';
+            prescriptions.forEach((prescription, index) => {
+                const prescriptionItem = document.createElement('div');
+                prescriptionItem.className = 'prescription-item';
+    
+                prescriptionItem.innerHTML = `
+                    <div class="prescription-details">
+                        <strong>${prescription.medicament}</strong> - ${prescription.dose}, ${prescription.boites} boîtes, ${prescription.posologie}
+                    </div>
+                    <div class="prescription-actions">
+                        <button class="edit-prescription-btn" data-index="${index}">
+                            <i class="bi bi-pencil-square"></i> <!-- Icône de modification -->
+                        </button>
+                    </div>
+                `;
+    
+                prescriptionList.appendChild(prescriptionItem);
+            });
+    
+            // Ajout des événements pour modifier une prescription
+            document.querySelectorAll('.edit-prescription-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = e.currentTarget.getAttribute('data-index');
+                    const prescription = prescriptions[index];
+    
+                    // Remplir les champs du formulaire avec les données de la prescription sélectionnée
+                    document.getElementById('medicament').value = prescription.medicament;
+                    document.getElementById('dose').value = prescription.dose;
+                    document.getElementById('boites').value = prescription.boites;
+                    document.getElementById('posologie').value = prescription.posologie;
+    
+                    prescriptionForm.style.display = 'block';
+                    infoPatient.style.display = 'none';
+    
+                    // Stocker l'index de la prescription à modifier
+                    prescriptionToEdit = index;
+                });
+            });
+        }
+    
+        // Ajouter les prescriptions au formulaire lors de la soumission
+        ordonnanceForm.addEventListener('submit', (event) => {
+            // Supprimer d'anciens champs de prescription cachés s'ils existent déjà
+            document.querySelectorAll('.hidden-prescription').forEach(el => el.remove());
+    
+            // Ajouter des champs cachés pour chaque prescription
+            prescriptions.forEach((prescription, index) => {
+                // Créer des champs cachés pour chaque propriété d'une prescription
+                const medicamentInput = document.createElement('input');
+                medicamentInput.type = 'hidden';
+                medicamentInput.name = `medicament_${index}`;
+                medicamentInput.value = prescription.medicament;
+                medicamentInput.className = 'hidden-prescription';
+    
+                const doseInput = document.createElement('input');
+                doseInput.type = 'hidden';
+                doseInput.name = `dose_${index}`;
+                doseInput.value = prescription.dose;
+                doseInput.className = 'hidden-prescription';
+    
+                const boitesInput = document.createElement('input');
+                boitesInput.type = 'hidden';
+                boitesInput.name = `boites_${index}`;
+                boitesInput.value = prescription.boites;
+                boitesInput.className = 'hidden-prescription';
+    
+                const posologieInput = document.createElement('input');
+                posologieInput.type = 'hidden';
+                posologieInput.name = `posologie_${index}`;
+                posologieInput.value = prescription.posologie;
+                posologieInput.className = 'hidden-prescription';
+    
+                // Ajouter ces champs au formulaire
+                ordonnanceForm.appendChild(medicamentInput);
+                ordonnanceForm.appendChild(doseInput);
+                ordonnanceForm.appendChild(boitesInput);
+                ordonnanceForm.appendChild(posologieInput);
+            });
+        });
+    </script>
+    
+</body>
+</html>
