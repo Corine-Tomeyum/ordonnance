@@ -194,7 +194,7 @@ input[type="text"], input[type="date"] {
 }
 
 
-.btn{
+.btn-vis{
     margin-left: 87%;
     margin-top: 25px;
     height: 50px;
@@ -206,7 +206,7 @@ input[type="text"], input[type="date"] {
     font-size: 25px;
 }
 
-.btn:hover{
+.btn-vis:hover{
     background-color: #007bff;
     cursor: pointer;
 }
