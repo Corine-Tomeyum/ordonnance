@@ -97,8 +97,15 @@
     
                     <label for="posologie">Posologie:</label>
                     <input type="text" id="posologie" name="posologie" >
-    
-                    <button type="button" class="btn" id="save-prescription-btn">Valider la prescription</button>
+                    
+                    <div class="btn-prescription">
+
+                        <button type="button" class="btn" id="cancel-prescription-btn">Abandonner</button>
+
+                        <button type="button" class="btn" id="save-prescription-btn">Valider la prescription</button>
+
+                    </div>
+                    
                 </div>
     
                 
@@ -111,6 +118,7 @@
         const addPrescriptionBtn = document.getElementById('add-prescription-btn');
         const prescriptionForm = document.getElementById('prescription-form');
         const savePrescriptionBtn = document.getElementById('save-prescription-btn');
+        const cancelPrescriptionBtn = document.getElementById('cancel-prescription-btn');
         const prescriptionList = document.getElementById('prescription-list');
         const infoPatient = document.getElementById('info-patient');
         const ordonnanceForm = document.getElementById('ordonnance-form');
@@ -132,7 +140,7 @@
             const boites = document.getElementById('boites').value;
             const posologie = document.getElementById('posologie').value;
     
-            if (medicament && dose && boites && posologie) {
+            if (medicament || dose || boites || posologie) {
                 const prescriptionData = {
                     medicament,
                     dose,
@@ -160,6 +168,13 @@
                 prescriptionForm.style.display = 'none';
                 infoPatient.style.display = 'block';
             }
+        });
+
+        // Abandonner une prescription
+        cancelPrescriptionBtn.addEventListener('click',() => {
+            prescriptionForm.style.display = 'none';
+            infoPatient.style.display = 'block';
+            prescriptionToEdit = null; // Réinitialiser lors de l'ajout d'une nouvelle prescription
         });
     
         // Fonction pour afficher les prescriptions dans la liste

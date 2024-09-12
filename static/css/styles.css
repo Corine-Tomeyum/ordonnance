@@ -138,6 +138,12 @@ input[type="text"], input[type="date"] {
     background-color: #27C39E;
 }
 
+.btn-prescription{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .btn i {
     margin-right: 5px;
 }
