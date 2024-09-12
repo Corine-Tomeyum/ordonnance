@@ -263,6 +263,7 @@ input[type="reset"]:focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="email"]:focus,
+input[type="date"]:focus,
 input[type="file"]:focus,
 textarea:focus {
     outline: none; /* Retirer le contour par défaut */
