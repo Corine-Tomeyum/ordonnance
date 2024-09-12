@@ -225,7 +225,7 @@ input[type="text"], input[type="date"] {
 }
 
 @media print {
-    .btn {
+    .btn-vis {
         display: none;
     }
 
