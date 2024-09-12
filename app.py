@@ -14,6 +14,7 @@ def index():
 def ordonnance_base():
     return render_template('ordonnance.html')
 
+
 @app.route('/formulaire', methods=['GET', 'POST'])
 def formulaire():
     if request.method == 'POST':
@@ -38,10 +39,22 @@ def formulaire():
                 'posologie': posologie[i]
             })
 
-        # Rediriger vers la page de visualisation en passant les prescriptions
-        return render_template('visualisation.html', nom=nom, prenom=prenom, date=date, prescriptions=prescriptions)
+        # Sauvegarder les informations dans la session
+        session['nom'] = nom
+        session['prenom'] = prenom
+        session['date'] = date
+        session['prescriptions'] = prescriptions
 
-    return render_template('formulaire.html')
+        # Rediriger vers la page de visualisation
+        return redirect(url_for('visualiser_ordonnance'))
+
+    # Pour la méthode GET, pré-remplir avec les données de la session
+    nom = session.get('nom', '')
+    prenom = session.get('prenom', '')
+    date = session.get('date', '')
+    prescriptions = session.get('prescriptions', [])
+
+    return render_template('formulaire.html', nom=nom, prenom=prenom, date=date, prescriptions=prescriptions)
 
 # Route pour visualiser l'ordonnance
 # Clé secrète pour chiffrer les sessions (générer une clé aléatoire et sécurisée)
