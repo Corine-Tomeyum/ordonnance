@@ -134,6 +134,10 @@ input[type="text"], input[type="date"] {
     cursor: pointer;
 }
 
+.btn:hover{
+    background-color: #27C39E;
+}
+
 .btn i {
     margin-right: 5px;
 }
@@ -223,6 +227,52 @@ input[type="text"], input[type="date"] {
     justify-content: space-around;
 
 }
+
+/* Style général pour les boutons */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="file"],
+textarea {
+    border: 2px solid #ccc; /* Bordure par défaut avec une couleur grise clair */
+    border-radius: 4px; /* Coins arrondis */
+    padding: 8px 12px; /* Espacement interne */
+    font-size: 16px; /* Taille de la police */
+    background-color: #f9f9f9; /* Couleur de fond par défaut */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    transition: border-color 0.3s, background-color 0.3s; /* Transition douce pour les changements */
+}
+
+/* Style pour les boutons lors du survol */
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="file"]:hover,
+textarea:hover {
+    border-color: #999; /* Couleur de bordure lors du survol */
+    
+}
+
+/* Style pour les éléments de formulaire et boutons lors du focus */
+button:focus,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="file"]:focus,
+textarea:focus {
+    outline: none; /* Retirer le contour par défaut */
+    border-color: #27C39E; /* Couleur de bordure lors du focus (gris) */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Ombre légère au focus */
+}
+
+
+
+
 
 @media print {
     .btn-vis {
