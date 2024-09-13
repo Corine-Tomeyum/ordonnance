@@ -15,6 +15,46 @@ def ordonnance_base():
     return render_template('ordonnance.html')
 
 
+@app.route('/formulaire', methods=['GET', 'POST'])
+def formulaire():
+    if request.method == 'POST':
+        # Récupérer les données du formulaire
+        nom = request.form['nom']
+        prenom = request.form['prenom']
+        date = request.form['date']
+
+        # Récupérer les prescriptions (vous devrez adapter si plusieurs prescriptions)
+        medicament = request.form.getlist('medicament')
+        dose = request.form.getlist('dose')
+        boites = request.form.getlist('boites')
+        posologie = request.form.getlist('posologie')
+
+        # Créer une structure de données pour les prescriptions
+        prescriptions = []
+        for i in range(len(medicament)):
+            prescriptions.append({
+                'medicament': medicament[i],
+                'dose': dose[i],
+                'boites': boites[i],
+                'posologie': posologie[i]
+            })
+
+        # Sauvegarder les informations dans la session
+        session['nom'] = nom
+        session['prenom'] = prenom
+        session['date'] = date
+        session['prescriptions'] = prescriptions
+
+        # Rediriger vers la page de visualisation
+        return redirect(url_for('visualiser_ordonnance'))
+
+    # Pour la méthode GET, pré-remplir avec les données de la session
+    nom = session.get('nom', '')
+    prenom = session.get('prenom', '')
+    date = session.get('date', '')
+    prescriptions = session.get('prescriptions', [])
+
+    return render_template('formulaire.html', nom=nom, prenom=prenom, date=date, prescriptions=prescriptions)
 
 # Route pour visualiser l'ordonnance
 # Clé secrète pour chiffrer les sessions (générer une clé aléatoire et sécurisée)
