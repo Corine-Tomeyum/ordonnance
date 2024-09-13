@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 from datetime import datetime
+import locale
+locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+
 import os
 
 
@@ -22,6 +25,13 @@ def formulaire():
         nom = request.form['nom']
         prenom = request.form['prenom']
         date = request.form['date']
+
+        date_obj = datetime.strptime(date, '%Y-%m-%d')
+    
+        # Obtenir le jour de la semaine et formater la date complète
+        jour_semaine = date_obj.strftime('%A')  # Ex: "vendredi"
+        date_complete = date_obj.strftime('%d %B %Y')  # Ex: "13 septembre 2024"
+        date_jour = f"{jour_semaine} {date_complete}"
 
         # Récupérer les prescriptions (vous devrez adapter si plusieurs prescriptions)
         medicament = request.form.getlist('medicament')
@@ -52,9 +62,27 @@ def formulaire():
     nom = session.get('nom', '')
     prenom = session.get('prenom', '')
     date = session.get('date', '')
+        # Initialiser la variable date_jour
+    date_jour = None
+        
+    if date:
+        try:
+                # Convertir la chaîne de caractères en objet datetime
+            date_obj = datetime.strptime(date, '%Y-%m-%d')
+                
+                # Obtenir le jour de la semaine et formater la date complète
+            jour_semaine = date_obj.strftime('%A')
+            date_complete = date_obj.strftime('%d %B %Y')
+                
+                # Concaténer le jour de la semaine avec la date complète
+            date_jour = f"{jour_semaine} {date_complete}"
+        except ValueError as e:
+                # Gérer l'exception si la date est dans un format invalide
+            print(f"Erreur de conversion de la date : {e}")
+            date_jour = "Date invalide"
     prescriptions = session.get('prescriptions', [])
 
-    return render_template('formulaire.html', nom=nom, prenom=prenom, date=date, prescriptions=prescriptions)
+    return render_template('formulaire.html', nom=nom, prenom=prenom, date=date_jour, prescriptions=prescriptions)
 
 # Route pour visualiser l'ordonnance
 # Clé secrète pour chiffrer les sessions (générer une clé aléatoire et sécurisée)
@@ -68,10 +96,32 @@ def visualiser_ordonnance():
         nom = request.form['nom']
         prenom = request.form['prenom']
         date = request.form['date']
+
+
+        # Initialiser la variable date_jour
+        date_jour = None
+        
+        if date:
+            try:
+                # Convertir la chaîne de caractères en objet datetime
+                date_obj = datetime.strptime(date, '%Y-%m-%d')
+                
+                # Obtenir le jour de la semaine et formater la date complète
+                jour_semaine = date_obj.strftime('%A')
+                date_complete = date_obj.strftime('%d %B %Y')
+                
+                # Concaténer le jour de la semaine avec la date complète
+                date_jour = f"{jour_semaine} {date_complete}"
+            except ValueError as e:
+                # Gérer l'exception si la date est dans un format invalide
+                print(f"Erreur de conversion de la date : {e}")
+                date_jour = "Date invalide"
+
+
         print("POST: ", nom, prenom)
 
         # Récupérer la date courante
-        date_courante = datetime.now().strftime("%d/%m/%Y")
+        date_courante = datetime.now().strftime("%A %d %B %Y")
 
         # Récupérer les prescriptions dynamiques
         prescriptions = []
@@ -109,12 +159,31 @@ def visualiser_ordonnance():
     nom = session.get('nom', '')
     prenom = session.get('prenom', '')
     date = session.get('date', '')
+    # Initialiser la variable date_jour
+    date_jour = None
+        
+    if date:
+        try:
+                # Convertir la chaîne de caractères en objet datetime
+            date_obj = datetime.strptime(date, '%Y-%m-%d')
+                
+                # Obtenir le jour de la semaine et formater la date complète
+            jour_semaine = date_obj.strftime('%A')
+            date_complete = date_obj.strftime('%d %B %Y')
+                
+                # Concaténer le jour de la semaine avec la date complète
+            date_jour = f"{jour_semaine} {date_complete}"
+        except ValueError as e:
+                # Gérer l'exception si la date est dans un format invalide
+            print(f"Erreur de conversion de la date : {e}")
+            date_jour = "Date invalide"
+
     print("GET: ", nom, prenom)
     prescriptions = session.get('prescriptions', [])
     print(prescriptions)
     date_courante = datetime.now().strftime("%d/%m/%Y")
 
-    return render_template('visualisation.html', nom=nom, prenom=prenom, date_courante=date_courante, date=date, prescriptions=prescriptions)
+    return render_template('visualisation.html', nom=nom, prenom=prenom, date_courante=date_courante, date=date_jour, prescriptions=prescriptions)
 
 @app.route('/historique')
 def historique():

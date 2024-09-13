@@ -25,7 +25,7 @@
                 <ol>
                     {% if prescriptions %}
                         {% for prescription in prescriptions %}
-                            <li><strong>{{ prescription.medicament }}</strong> - {{ prescription.dose }}, {{ prescription.boites }} boîtes, {{ prescription.posologie }}</li>
+                            <li><strong>{{ prescription.medicament }}</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ prescription.dose }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ prescription.boites }} boîtes <br><br>{{ prescription.posologie }}</li>
                         {% endfor %}
                     {% else %}
                         <li>Aucune prescription ajoutée.</li>
