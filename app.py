@@ -1,7 +1,8 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 from datetime import datetime
 import locale
-locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+locale.setlocale(locale.LC_TIME, 'C')
+
 
 import os
 
