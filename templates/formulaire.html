@@ -79,7 +79,10 @@
                     <label for="date">Date du prochain rendez-vous:</label>
                     <input type="date" id="date" name="date" >
 
-                    <button type="submit" class="btn">Visualiser</button>
+                    <label for="heure">Heure du prochain rendez-vous:</label>
+                    <input type="time" id="heure" name="heure"> <br>
+
+                    <button type="submit" class="btn" style="margin-left: 85%;">Visualiser</button>
         
                 </div>
 
@@ -223,6 +226,8 @@
         ordonnanceForm.addEventListener('submit', (event) => {
             // Supprimer d'anciens champs de prescription cachés s'ils existent déjà
             document.querySelectorAll('.hidden-prescription').forEach(el => el.remove());
+            document.querySelectorAll('.hidden-date-heure').forEach(el => el.remove());
+
     
             // Ajouter des champs cachés pour chaque prescription
             prescriptions.forEach((prescription, index) => {
@@ -257,6 +262,26 @@
                 ordonnanceForm.appendChild(boitesInput);
                 ordonnanceForm.appendChild(posologieInput);
             });
+
+             // Ajouter les détails du rendez-vous au formulaire
+                const dateInput = document.getElementById('date').value;
+                const heureInput = document.getElementById('heure').value;
+
+                const dateHiddenInput = document.createElement('input');
+                dateHiddenInput.type = 'hidden';
+                dateHiddenInput.name = 'date';
+                dateHiddenInput.value = dateInput;
+                dateHiddenInput.className = 'hidden-date-heure';
+
+                const heureHiddenInput = document.createElement('input');
+                heureHiddenInput.type = 'hidden';
+                heureHiddenInput.name = 'heure';
+                heureHiddenInput.value = heureInput;
+                heureHiddenInput.className = 'hidden-date-heure';
+
+                ordonnanceForm.appendChild(dateHiddenInput);
+                ordonnanceForm.appendChild(heureHiddenInput);
+
         });
     </script>
     

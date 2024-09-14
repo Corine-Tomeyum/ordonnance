@@ -25,6 +25,7 @@ def formulaire():
         nom = request.form['nom']
         prenom = request.form['prenom']
         date = request.form['date']
+        heure = request.form['heure']
 
         date_obj = datetime.strptime(date, '%Y-%m-%d')
     
@@ -53,6 +54,7 @@ def formulaire():
         session['nom'] = nom
         session['prenom'] = prenom
         session['date'] = date
+        session['heure'] = heure
         session['prescriptions'] = prescriptions
 
         # Rediriger vers la page de visualisation
@@ -62,6 +64,7 @@ def formulaire():
     nom = session.get('nom', '')
     prenom = session.get('prenom', '')
     date = session.get('date', '')
+    heure = session.get('heure', '')
         # Initialiser la variable date_jour
     date_jour = None
         
@@ -82,7 +85,7 @@ def formulaire():
             date_jour = "Date invalide"
     prescriptions = session.get('prescriptions', [])
 
-    return render_template('formulaire.html', nom=nom, prenom=prenom, date=date_jour, prescriptions=prescriptions)
+    return render_template('formulaire.html', nom=nom, prenom=prenom, date=date_jour, heure=heure, prescriptions=prescriptions)
 
 # Route pour visualiser l'ordonnance
 # Clé secrète pour chiffrer les sessions (générer une clé aléatoire et sécurisée)
@@ -96,6 +99,7 @@ def visualiser_ordonnance():
         nom = request.form['nom']
         prenom = request.form['prenom']
         date = request.form['date']
+        heure = request.form['heure']
 
 
         # Initialiser la variable date_jour
@@ -150,6 +154,7 @@ def visualiser_ordonnance():
         session['nom'] = nom
         session['prenom'] = prenom
         session['date'] = date
+        session['heure'] = heure
         session['prescriptions'] = prescriptions
 
         # Rediriger vers la page de visualisation
@@ -159,6 +164,7 @@ def visualiser_ordonnance():
     nom = session.get('nom', '')
     prenom = session.get('prenom', '')
     date = session.get('date', '')
+    heure = session.get('heure', '')
     # Initialiser la variable date_jour
     date_jour = None
         
@@ -183,7 +189,7 @@ def visualiser_ordonnance():
     print(prescriptions)
     date_courante = datetime.now().strftime("%d/%m/%Y")
 
-    return render_template('visualisation.html', nom=nom, prenom=prenom, date_courante=date_courante, date=date_jour, prescriptions=prescriptions)
+    return render_template('visualisation.html', nom=nom, prenom=prenom, date_courante=date_courante, date=date_jour, heure=heure, prescriptions=prescriptions)
 
 @app.route('/historique')
 def historique():

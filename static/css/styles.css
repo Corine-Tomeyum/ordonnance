@@ -286,6 +286,21 @@ textarea:focus {
         display: none;
     }
 
+    .container_ordo{
+        width: 100%; /* Largeur fixe pour le contenu */
+        margin: 0 auto;
+        padding: 1cm;
+        box-sizing: border-box;
+
+    }
+
+    #resultat_ordonnance{
+        width: 100%;
+        height: auto;
+        background-color: white;
+
+    }
+
     #vis_head{
         display: none;
     }
@@ -293,6 +308,12 @@ textarea:focus {
         margin: 0; /* Retire les marges */
     }
     body {
-        margin: 1cm; /* Définit des marges internes */
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: -9%;
     }
 }
